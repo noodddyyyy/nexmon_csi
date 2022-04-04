@@ -142,8 +142,8 @@ struct csi_udp_frame {
     uint16 csiconf;
     uint16 chanspec;
     uint16 chip;
+    uint32 tsf_l;
     uint32 csi_values[];
-    uint32  tsf_l;
 } __attribute__((packed));
 
 struct int14 {signed int val:14;} __attribute__((packed));
