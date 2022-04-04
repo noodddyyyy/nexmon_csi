@@ -143,7 +143,7 @@ struct csi_udp_frame {
     uint16 chanspec;
     uint16 chip;
     uint32 tsf_l;
-    unit16 RxTSFTime;
+    uint16 RxTSFTime;
     uint32 csi_values[];
 } __attribute__((packed));
 
