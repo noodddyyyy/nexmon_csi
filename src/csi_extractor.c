@@ -158,9 +158,9 @@ struct sk_buff *p_csi = 0;
 int8 last_rssi = 0;
 uint16 phystatus[6] = {0,0,0,0, 0, 0};
 uint16 RxTSFTime = 0;
-uint16 AvbRxTimeL = 0xffff;
-uint16 AvbRxTimeH = 0xffff;
-uint16 MuRate = 0xffff;
+//uint16 AvbRxTimeL = 0xffff;
+//uint16 AvbRxTimeH = 0xffff;
+//uint16 MuRate = 0xffff;
 
 void
 create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
@@ -183,9 +183,9 @@ create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
     udpfrm->chip = NEXMON_CHIP;
     udpfrm->tsf_l = 0;
     udpfrm->RxTSFTime = RxTSFTime;
-    udpfrm->AvbRxTimeL = AvbRxTimeL;
-    udpfrm->AvbRxTimeH = AvbRxTimeH;
-    udpfrm->MuRate = MuRate;
+//    udpfrm->AvbRxTimeL = AvbRxTimeL;
+//    udpfrm->AvbRxTimeH = AvbRxTimeH;
+//    udpfrm->MuRate = MuRate;
 }
 
 void
@@ -272,9 +272,9 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->seqCnt = ucodecsifrm->seqcnt;
             udpfrm->tsf_l = tsf_l;
             memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
-            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
-            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
-            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
+//            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
+//            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
+//            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
 #else
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->csi[tones]), sizeof(udpfrm->SrcMac)); // last csifrm also contains SrcMac
             udpfrm->seqCnt = *((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)); // last csifrm also contains seqN
@@ -302,9 +302,9 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
     struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
     memcpy(phystatus, &rxh->PhyRxStatus_0, sizeof(phystatus));
     memcpy(&RxTSFTime, &rxh->RxTSFTime, sizeof(RxTSFTime));
-    memcpy(&AvbRxTimeL, &rxh->AvbRxTimeL, sizeof(AvbRxTimeL));
-    memcpy(&AvbRxTimeH, &rxh->AvbRxTimeH, sizeof(AvbRxTimeH));
-    memcpy(&MuRate, &rxh->MuRate, sizeof(MuRate));
+//    memcpy(&AvbRxTimeL, &rxh->AvbRxTimeL, sizeof(AvbRxTimeL));
+//    memcpy(&AvbRxTimeH, &rxh->AvbRxTimeH, sizeof(AvbRxTimeH));
+//    memcpy(&MuRate, &rxh->MuRate, sizeof(MuRate));
 
     wlc_recv(wlc_hw->wlc, p);
 }
