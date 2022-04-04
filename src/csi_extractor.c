@@ -143,6 +143,7 @@ struct csi_udp_frame {
     uint16 chanspec;
     uint16 chip;
     uint32 tsf_l;
+    unit16 RxTSFTime;
     uint32 csi_values[];
 } __attribute__((packed));
 
@@ -153,6 +154,7 @@ uint16 inserted_csi_values = 0;
 struct sk_buff *p_csi = 0;
 int8 last_rssi = 0;
 uint16 phystatus[6] = {0,0,0,0, 0, 0};
+uint16 RxTSFTime = 0;
 
 void
 create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
@@ -174,6 +176,7 @@ create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
     udpfrm->chanspec = get_chanspec(wl->wlc);
     udpfrm->chip = NEXMON_CHIP;
     udpfrm->tsf_l = 0;
+    udpfrm->RxTSFTime = RxTSFTime;
 }
 
 void
@@ -259,6 +262,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->src), sizeof(udpfrm->SrcMac));
             udpfrm->seqCnt = ucodecsifrm->seqcnt;
             udpfrm->tsf_l = tsf_l;
+            udpfrm->RxTSFTime = RxTSFTime;
 #else
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->csi[tones]), sizeof(udpfrm->SrcMac)); // last csifrm also contains SrcMac
             udpfrm->seqCnt = *((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)); // last csifrm also contains seqN
@@ -285,6 +289,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
     last_rssi = wlc_rxhdr->rssi;
     struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
     memcpy(phystatus, &rxh->PhyRxStatus_0, sizeof(phystatus));
+    RxTSFTime =&rxh->RxTSFTime;
     wlc_recv(wlc_hw->wlc, p);
 }
 
