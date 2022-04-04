@@ -144,6 +144,7 @@ struct csi_udp_frame {
     uint16 chip;
     uint32 tsf_l;
     uint16 RxTSFTime;
+    uint16 RxTSFTime_pad;
 //    uint16 AvbRxTimeL;
 //    uint16 AvbRxTimeH;
 //    uint16 MuRate;
@@ -272,6 +273,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->seqCnt = ucodecsifrm->seqcnt;
             udpfrm->tsf_l = tsf_l;
             memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
+            memcpy(&udpfrm->RxTSFTime_pad, &RxTSFTime, sizeof(RxTSFTime));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
