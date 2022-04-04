@@ -143,6 +143,7 @@ struct csi_udp_frame {
     uint16 chanspec;
     uint16 chip;
     uint32 csi_values[];
+    uint32  tsf_l;
 } __attribute__((packed));
 
 struct int14 {signed int val:14;} __attribute__((packed));
@@ -172,6 +173,7 @@ create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
     udpfrm->csiconf = csiconf;
     udpfrm->chanspec = get_chanspec(wl->wlc);
     udpfrm->chip = NEXMON_CHIP;
+    udpfrm->tsf_l = 0;
 }
 
 void
@@ -256,6 +258,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
 #if NEXMON_CHIP == CHIP_VER_BCM4366c0
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->src), sizeof(udpfrm->SrcMac));
             udpfrm->seqCnt = ucodecsifrm->seqcnt;
+            udpfrm->tsf_l = tsf_l;
 #else
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->csi[tones]), sizeof(udpfrm->SrcMac)); // last csifrm also contains SrcMac
             udpfrm->seqCnt = *((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)); // last csifrm also contains seqN
