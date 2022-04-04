@@ -158,9 +158,9 @@ struct sk_buff *p_csi = 0;
 int8 last_rssi = 0;
 uint16 phystatus[6] = {0,0,0,0, 0, 0};
 uint16 RxTSFTime = 0;
-uint16 AvbRxTimeL = 0;
-uint16 AvbRxTimeH = 0;
-uint16 MuRate = 0;
+uint16 AvbRxTimeL = 0xffff;
+uint16 AvbRxTimeH = 0xffff;
+uint16 MuRate = 0xffff;
 
 void
 create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
