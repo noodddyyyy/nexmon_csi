@@ -289,7 +289,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
     wlc_rxhdr->tsf_l = tsf_l;
     wlc_phy_rssi_compute(wlc_hw->band->pi, wlc_rxhdr);
     last_rssi = wlc_rxhdr->rssi;
-    rxh = &wlc_rxhdr->rxhdr;
+    struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
     memcpy(phystatus, &rxh->PhyRxStatus_0, sizeof(phystatus));
     memcpy(&RxTSFTime, &rxh->RxTSFTime, sizeof(RxTSFTime));
     wlc_recv(wlc_hw->wlc, p);
