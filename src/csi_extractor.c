@@ -261,11 +261,11 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->seqCnt = *((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)); // last csifrm also contains seqN
             udpfrm->fc = (*((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)+1)); // last csifrm also contains frame control field
 #endif
-            uint8 bw = (udpfrm->chanspec & 0x3800) >> 11;
-	    //BW 2 (20Mhz) ->  payload 28:36 are unused (tested on BCM4358 (Nexus 6P) and BCM43455c0 (Raspberry PI))
-            uint8 offset = (bw == 2) ? 28 : 0; 
-	    //Description of the bits: https://github.com/MerlinRdev/86u-merlin/blob/master/release/src-rt-5.02hnd/bcmdrivers/broadcom/net/wl/impl51/4365/src/include/d11.h#L2935
-            memcpy(&udpfrm->csi_values[offset], phystatus, sizeof(phystatus));
+//            uint8 bw = (udpfrm->chanspec & 0x3800) >> 11;
+//	    //BW 2 (20Mhz) ->  payload 28:36 are unused (tested on BCM4358 (Nexus 6P) and BCM43455c0 (Raspberry PI))
+//            uint8 offset = (bw == 2) ? 28 : 0;
+//	    //Description of the bits: https://github.com/MerlinRdev/86u-merlin/blob/master/release/src-rt-5.02hnd/bcmdrivers/broadcom/net/wl/impl51/4365/src/include/d11.h#L2935
+//            memcpy(&udpfrm->csi_values[offset], phystatus, sizeof(phystatus));
 
             p_csi->len = sizeof(struct csi_udp_frame) + inserted_csi_values * sizeof(uint32);
             skb_pull(p_csi, sizeof(struct ethernet_ip_udp_header));
