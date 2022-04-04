@@ -144,9 +144,9 @@ struct csi_udp_frame {
     uint16 chip;
     uint32 tsf_l;
     uint16 RxTSFTime;
-    uint16 AvbRxTimeL;
-    uint16 AvbRxTimeH;
-    uint16 MuRate;
+//    uint16 AvbRxTimeL;
+//    uint16 AvbRxTimeH;
+//    uint16 MuRate;
     uint32 csi_values[];
 } __attribute__((packed));
 
