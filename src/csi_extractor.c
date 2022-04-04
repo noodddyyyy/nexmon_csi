@@ -144,6 +144,9 @@ struct csi_udp_frame {
     uint16 chip;
     uint32 tsf_l;
     uint16 RxTSFTime;
+    uint16 AvbRxTimeL;
+    uint16 AvbRxTimeH;
+    uint16 MuRate;
     uint32 csi_values[];
 } __attribute__((packed));
 
@@ -155,6 +158,9 @@ struct sk_buff *p_csi = 0;
 int8 last_rssi = 0;
 uint16 phystatus[6] = {0,0,0,0, 0, 0};
 uint16 RxTSFTime = 0;
+uint16 AvbRxTimeL = 0;
+uint16 AvbRxTimeH = 0;
+uint16 MuRate = 0;
 
 void
 create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
@@ -177,6 +183,9 @@ create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
     udpfrm->chip = NEXMON_CHIP;
     udpfrm->tsf_l = 0;
     udpfrm->RxTSFTime = RxTSFTime;
+    udpfrm->AvbRxTimeL = AvbRxTimeL;
+    udpfrm->AvbRxTimeH = AvbRxTimeH;
+    udpfrm->MuRate = MuRate;
 }
 
 void
@@ -256,15 +265,16 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
 
         missing_csi_frames --;
 
-        struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
-
         // send csi udp to host
         if (missing_csi_frames == 0) {
 #if NEXMON_CHIP == CHIP_VER_BCM4366c0
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->src), sizeof(udpfrm->SrcMac));
             udpfrm->seqCnt = ucodecsifrm->seqcnt;
             udpfrm->tsf_l = tsf_l;
-            memcpy(&udpfrm->RxTSFTime, &rxh->RxTSFTime, sizeof(RxTSFTime));
+            memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
+            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
+            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
+            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
 #else
             memcpy(udpfrm->SrcMac, &(ucodecsifrm->csi[tones]), sizeof(udpfrm->SrcMac)); // last csifrm also contains SrcMac
             udpfrm->seqCnt = *((uint16*)(&(ucodecsifrm->csi[tones]))+(sizeof(udpfrm->SrcMac)>>1)); // last csifrm also contains seqN
@@ -292,6 +302,10 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
     struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
     memcpy(phystatus, &rxh->PhyRxStatus_0, sizeof(phystatus));
     memcpy(&RxTSFTime, &rxh->RxTSFTime, sizeof(RxTSFTime));
+    memcpy(&AvbRxTimeL, &rxh->AvbRxTimeL, sizeof(AvbRxTimeL));
+    memcpy(&AvbRxTimeH, &rxh->AvbRxTimeH, sizeof(AvbRxTimeH));
+    memcpy(&MuRate, &rxh->MuRate, sizeof(MuRate));
+
     wlc_recv(wlc_hw->wlc, p);
 }
 
