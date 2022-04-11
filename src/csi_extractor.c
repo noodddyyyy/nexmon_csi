@@ -273,8 +273,6 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
 
         missing_csi_frames --;
 
-        struct d11rxhdr  * rxh1 = &wlc_rxhdr->rxhdr;
-
         // send csi udp to host
         if (missing_csi_frames == 0) {
 #if NEXMON_CHIP == CHIP_VER_BCM4366c0
@@ -283,7 +281,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->tsf_l = tsf_l;
             memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
             memcpy(&udpfrm->RxTSFTime_pad, &RxTSFTime_pad, sizeof(udpfrm->RxTSFTime_pad));
-            memcpy(&udpfrm->PhyRxStatus_0, &rxh1->PhyRxStatus_0, sizeof(phystatus));
+            memcpy(&udpfrm->PhyRxStatus_0, phystatus, sizeof(phystatus));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
