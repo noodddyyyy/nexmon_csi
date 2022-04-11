@@ -273,6 +273,8 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
 
         missing_csi_frames --;
 
+        struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
+
         // send csi udp to host
         if (missing_csi_frames == 0) {
 #if NEXMON_CHIP == CHIP_VER_BCM4366c0
@@ -281,7 +283,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->tsf_l = tsf_l;
             memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
             memcpy(&udpfrm->RxTSFTime_pad, &RxTSFTime_pad, sizeof(udpfrm->RxTSFTime_pad));
-            memcpy(&udpfrm->PhyRxStatus_0, phystatus, sizeof(phystatus));
+            memcpy(&udpfrm->PhyRxStatus_0, &rxh->PhyRxStatus_0, sizeof(phystatus));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
@@ -309,7 +311,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
     wlc_rxhdr->tsf_l = tsf_l;
     wlc_phy_rssi_compute(wlc_hw->band->pi, wlc_rxhdr);
     last_rssi = wlc_rxhdr->rssi;
-    struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
+//    struct d11rxhdr  * rxh = &wlc_rxhdr->rxhdr;
     memcpy(phystatus, &rxh->PhyRxStatus_0, sizeof(phystatus));
     memcpy(&RxTSFTime, &rxh->RxTSFTime, sizeof(RxTSFTime));
     memcpy(&RxTSFTime_pad, &rxh->AvbRxTimeH, sizeof(RxTSFTime_pad));
