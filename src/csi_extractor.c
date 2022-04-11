@@ -148,7 +148,12 @@ struct csi_udp_frame {
 //    uint16 AvbRxTimeL;
 //    uint16 AvbRxTimeH;
 //    uint16 MuRate;
-    uint16 phyStatus[6] = {0,0,0,0, 0, 0};
+    uint16 PhyRxStatus_0;
+    uint16 PhyRxStatus_1;
+    uint16 PhyRxStatus_2;
+    uint16 PhyRxStatus_3;
+    uint16 PhyRxStatus_4;
+    uint16 PhyRxStatus_5;
     uint32 csi_values[];
 } __attribute__((packed));
 
@@ -276,7 +281,7 @@ process_frame_hook(struct sk_buff *p, struct wlc_d11rxhdr *wlc_rxhdr, struct wlc
             udpfrm->tsf_l = tsf_l;
             memcpy(&udpfrm->RxTSFTime, &RxTSFTime, sizeof(RxTSFTime));
             memcpy(&udpfrm->RxTSFTime_pad, &RxTSFTime_pad, sizeof(udpfrm->RxTSFTime_pad));
-            memcpy(&udpfrm->phyStatus, phystatus, sizeof(phystatus));
+            memcpy(&udpfrm->PhyRxStatus_0, phystatus, sizeof(phystatus));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->AvbRxTimeL, &AvbRxTimeL, sizeof(AvbRxTimeL));
 //            memcpy(&udpfrm->MuRate, &MuRate, sizeof(MuRate));
