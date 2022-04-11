@@ -148,7 +148,7 @@ struct csi_udp_frame {
 //    uint16 AvbRxTimeL;
 //    uint16 AvbRxTimeH;
 //    uint16 MuRate;
-    uint16 phyStatus[6];
+    uint16 phyStatus[6] = {0,0,0,0, 0, 0};
     uint32 csi_values[];
 } __attribute__((packed));
 
@@ -186,7 +186,6 @@ create_new_csi_frame(struct wl_info *wl, uint16 csiconf, int length)
     udpfrm->chip = NEXMON_CHIP;
     udpfrm->tsf_l = 0;
     udpfrm->RxTSFTime = RxTSFTime;
-    udpfrm->phyStatus = {0, 0, 0, 0, 0, 0};
 //    udpfrm->AvbRxTimeL = AvbRxTimeL;
 //    udpfrm->AvbRxTimeH = AvbRxTimeH;
 //    udpfrm->MuRate = MuRate;
